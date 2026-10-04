@@ -11,7 +11,10 @@
 > [Jaime Fernández González (jaimefgdev)](https://github.com/jaimefgdev): the original idea and the code up to March
 > 2026 are systemBlue's; everything added from October 2026 onward is listed in the [CHANGELOG](CHANGELOG.md).
 
-sounddifff is a CLI tool for audio producers and developers to compare two audio files and see exactly what changed. It reports differences in loudness, spectral balance, timing, and flags issues like clipping and silence. Output comes as colored terminal text, structured JSON, or a self-contained HTML report.
+sounddifff is a CLI tool for audio producers and developers to compare two audio files (or two folders) and see exactly what changed, and to check a single file against
+the loudness targets of Spotify, YouTube, Apple Music, podcasts and broadcast. It reports differences in loudness, spectral balance, timing, and flags issues like clipping and silence. Output comes as colored terminal text, structured JSON, or a self-contained HTML report.
+
+![sounddifff HTML report comparing two masters: loudness, spectral bands and clipping](https://raw.githubusercontent.com/jaimefgdev/sounddifff/main/docs/img/report.png)
 
 ## Example
 
@@ -95,22 +98,74 @@ sounddifff reference.wav render.wav --fail-if "lufs>1,peak>0.5,band>3,clipping"
 | `silence` | the second file has more silent regions than the first |
 | `format` | sample rate or channel count differ |
 
+### Check one file against a delivery target
+
+```sh
+sounddifff check episode.wav --preset podcast
+```
+
+```text
+sounddifff check: episode.wav against Podcasts (Apple Podcasts, Spotify for Podcasters)
+
+  FAIL  loudness   -11.2 LUFS     target -16.0 +/- 1 LUFS
+  PASS  true peak  -10.5 dBTP     target <= -1.0 dBTP
+  PASS  clipping   0 event(s)     target none
+
+  Gain to reach the target: -4.8 dB
+```
+
+| Preset | Integrated loudness | True peak |
+|---|---|---|
+| `spotify`, `youtube` | -14 LUFS ± 1 | ≤ -1 dBTP |
+| `apple-music`, `podcast` | -16 LUFS ± 1 | ≤ -1 dBTP |
+| `ebu-r128` (European broadcast) | -23 LUFS ± 0.5 | ≤ -1 dBTP |
+| `atsc-a85` (US broadcast) | -24 LUFS ± 2 | ≤ -2 dBTP |
+
+True peak is measured with 4x oversampling (ITU-R BS.1770-4), so inter-sample peaks that would clip after
+encoding are caught. Override any value with `--lufs`, `--tolerance` or `--max-peak`; add `--format json` for
+scripts. Exit code 3 when the file misses the target.
+
+### Compare folders
+
+```sh
+sounddifff renders/v1/ renders/v2/ --fail-if "lufs>1,clipping"
+```
+
+Files are paired by relative path (sub-folders included) and compared one by one; files that exist in only one
+folder are listed. Useful for game sound banks, voice lines or any batch of renders. `--format json` is supported.
+
 ### GitHub Action
 
 ```yaml
-- uses: jaimefgdev/sounddifff@v0.3.0
-  with:
-    reference: audio/reference.wav
-    candidate: build/render.wav
-    fail-if: lufs>1,peak>0.5,clipping
+permissions:
+  contents: read
+  pull-requests: write   # only needed for comment: true
+
+steps:
+  - uses: actions/checkout@v4
+
+  # Compare a render with its reference (files or folders)
+  - uses: jaimefgdev/sounddifff@v0.4.0
+    with:
+      reference: audio/reference.wav
+      candidate: build/render.wav
+      fail-if: lufs>1,peak>0.5,clipping
+      comment: true
+
+  # Or check one file against a delivery target
+  - uses: jaimefgdev/sounddifff@v0.4.0
+    with:
+      candidate: build/episode.wav
+      preset: podcast
+      artifact-name: podcast-check
 ```
 
-The report is added to the job summary and uploaded as an HTML artifact; the step fails if a rule is broken.
-Outputs: `passed` (`true`/`false`) and `report` (path of the HTML file).
+The result goes to the job summary and, with `comment: true`, to a pull request comment that is updated on
+every push. File comparisons also upload the HTML report as an artifact. The step fails when a rule or target
+is missed. Outputs: `passed` (`true`/`false`) and `report` (path of the HTML file).
 
-`--fail-if` and the GitHub Action were added by Jaime Fernández González (jaimefgdev) in October 2026.
-
-See [docs/usage.md](docs/usage.md) for all options.
+`--fail-if`, `sounddifff check`, folder comparison and the GitHub Action were added by Jaime Fernández González
+(jaimefgdev) in October 2026.
 
 ## What it analyzes
 

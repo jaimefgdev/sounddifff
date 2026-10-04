@@ -54,7 +54,7 @@ dev = [
 ]
 
 [project.scripts]
-sounddifff = "sounddifff.cli:main"
+sounddifff = "sounddifff.cli:entry"
 
 [project.urls]
 Homepage = "https://github.com/jaimefgdev/sounddifff"
@@ -97,6 +97,7 @@ disallow_untyped_defs = true
 module = [
     "soundfile.*",
     "pyloudnorm.*",
+    "scipy.*",
 ]
 ignore_missing_imports = true
 

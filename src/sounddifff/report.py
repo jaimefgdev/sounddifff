@@ -11,8 +11,12 @@ from typing import Any
 from rich.console import Console
 from rich.table import Table
 
+from sounddifff import __version__
 from sounddifff.formats import format_channels, format_duration
 from sounddifff.types import DiffResult, OutputFormat, SegmentKind
+
+# Long files can clip thousands of times; reports list the first ones and count the rest.
+MAX_LISTED_ISSUES = 20
 
 
 def render(
@@ -198,13 +202,16 @@ def _print_issues_section(console: Console, result: DiffResult) -> None:
         return
 
     console.print("[bold]Issues[/bold]")
-    for clip in issues.clips:
+    for clip in issues.clips[:MAX_LISTED_ISSUES]:
         ts = format_duration(clip.timestamp)
         ch = f"ch{clip.channel}" if clip.channel > 0 else ""
         console.print(
             f"  [red]Clipping[/red] in {clip.file_label} at {ts} "
             f"({clip.sample_count} samples) {ch}"
         )
+    hidden = len(issues.clips) - MAX_LISTED_ISSUES
+    if hidden > 0:
+        console.print(f"  ... and {hidden} more clipping events ({len(issues.clips)} in total)")
 
 
 def _format_hz_range(low: float, high: float) -> str:
@@ -238,17 +245,22 @@ def render_html(result: DiffResult) -> str:
     """Render the result as a self-contained HTML report."""
     try:
         from jinja2 import Environment, FileSystemLoader
+    except ImportError:
+        return _render_html_fallback(result)
 
-        template_dir = Path(__file__).parent.parent.parent / "templates"
-        if template_dir.exists():
-            env = Environment(loader=FileSystemLoader(str(template_dir)))
-            template = env.get_template("report.html.j2")
-            return template.render(result=result, format_duration=format_duration)
-    except (ImportError, Exception):
-        pass
-
-    # Fallback: minimal HTML without jinja2
-    return _render_html_fallback(result)
+    # The template ships inside the package, so installed copies get the same report as a source checkout.
+    env = Environment(
+        loader=FileSystemLoader(str(Path(__file__).parent / "templates")), autoescape=True
+    )
+    template = env.get_template("report.html.j2")
+    return template.render(
+        result=result,
+        format_duration=format_duration,
+        file_a=Path(result.metadata.file_a.path).name,
+        file_b=Path(result.metadata.file_b.path).name,
+        version=__version__,
+        max_issues=MAX_LISTED_ISSUES,
+    )
 
 
 def _render_html_fallback(result: DiffResult) -> str:

@@ -49,6 +49,27 @@ the second file. The report is printed as usual; each broken rule is written to 
 Exit codes: `0` all rules pass, `1` error (unreadable file, unsupported format), `2` invalid command line or rule,
 `3` at least one rule failed.
 
+## Checking one file (`sounddifff check`)
+
+```sh
+sounddifff check master.wav --preset spotify
+sounddifff check master.wav --preset ebu-r128 --format json
+sounddifff check master.wav --lufs -16 --tolerance 0.5 --max-peak -1.5
+```
+
+Presets: `spotify`, `youtube` (-14 LUFS), `apple-music`, `podcast` (-16 LUFS), `ebu-r128` (-23 LUFS ± 0.5),
+`atsc-a85` (-24 LUFS ± 2). Checks integrated loudness, true peak (4x oversampled) and clipping, and suggests the
+gain needed to reach the target. Exit code 3 when any check fails.
+
+## Comparing folders
+
+```sh
+sounddifff before/ after/ --fail-if "lufs>1"
+```
+
+Both arguments must be folders. Audio files (wav, flac, ogg, aiff, mp3, m4a, aac) are paired by relative path.
+Output is a summary table (or JSON with `--format json`); HTML is not available for folders.
+
 ## CLI options
 
 | Flag | Description |

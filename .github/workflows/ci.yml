@@ -55,13 +55,24 @@ jobs:
   action:
     # Exercises action.yml exactly as other repositories would use it.
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
       - name: Generate test audio
-        run: pip install numpy soundfile && python scripts/generate_test_audio.py
+        run: |
+          pip install numpy soundfile pyloudnorm
+          python scripts/generate_test_audio.py
+          python - <<'PY'
+          import numpy as np, pyloudnorm as pyln, soundfile as sf
+          t = np.arange(48000 * 5) / 48000
+          x = np.column_stack([0.1 * np.sin(2 * np.pi * 1000 * t)] * 2)
+          sf.write("tests/fixtures/spotify_ready.wav", pyln.normalize.loudness(x, pyln.Meter(48000).integrated_loudness(x), -14.0), 48000, subtype="FLOAT")
+          PY
       - name: Identical files pass
         id: same
         uses: ./
@@ -79,10 +90,38 @@ jobs:
           candidate: tests/fixtures/clipped.wav
           fail-if: lufs>1,clipping
           artifact-name: report-fail
+      - name: File at -14 LUFS meets the Spotify target
+        id: preset-pass
+        uses: ./
+        with:
+          candidate: tests/fixtures/spotify_ready.wav
+          preset: spotify
+          comment: "true"
+          artifact-name: preset-pass
+      - name: Clipped file misses the Spotify target
+        id: preset-fail
+        continue-on-error: true
+        uses: ./
+        with:
+          candidate: tests/fixtures/clipped.wav
+          preset: spotify
+          artifact-name: preset-fail
+      - name: Folders are compared file by file
+        id: folders
+        uses: ./
+        with:
+          reference: tests/fixtures
+          candidate: tests/fixtures
+          fail-if: lufs>0.1
+          artifact-name: folders
       - name: Check outputs
         shell: bash
         run: |
           test "${{ steps.same.outputs.passed }}" = "true"
           test "${{ steps.clipped.outputs.passed }}" = "false"
           test "${{ steps.clipped.outcome }}" = "failure"
+          test "${{ steps.preset-pass.outputs.passed }}" = "true"
+          test "${{ steps.preset-fail.outputs.passed }}" = "false"
+          test "${{ steps.folders.outputs.passed }}" = "true"
+          test -z "${{ steps.folders.outputs.report }}"
           echo "action behaves as expected"

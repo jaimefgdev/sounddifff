@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0]
+
+Changes by Jaime Fernández González ([@jaimefgdev](https://github.com/jaimefgdev)).
+
+### Added
+- `sounddifff check FILE --preset ...`: checks one file against Spotify, YouTube, Apple Music, podcast, EBU R 128
+  or ATSC A/85 targets (integrated loudness, true peak with 4x oversampling, clipping) and suggests the gain to
+  apply. New module `sounddifff.compliance`.
+- Folder comparison: `sounddifff dir_a/ dir_b/` pairs files by relative path, compares each pair, lists files that
+  exist on one side only and honours `--fail-if`. New module `sounddifff.batch`.
+- GitHub Action: `preset` input (check one file), folder support and `comment: true` to post the result on pull
+  requests (one comment, updated on every push).
+- README image of the HTML report.
+
+### Fixed
+- The HTML template lived outside the package, so installed copies silently fell back to a much simpler report.
+  It now ships inside the package.
+- HTML report: the footer printed the first file's path instead of the version; Windows paths were not shortened to
+  file names; spectral columns were misaligned.
+- Reports listed every clipping event (thousands on long files); they now list the first 20 and count the rest.
+
 ## [0.3.0] — sounddifff
 
 Changes by Jaime Fernández González ([@jaimefgdev](https://github.com/jaimefgdev)), maintainer since October 2026.

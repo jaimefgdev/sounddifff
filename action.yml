@@ -1,25 +1,30 @@
-# GitHub Action for audio regression checks.
+# GitHub Action for audio regression and loudness checks.
 # Added by Jaime Fernández González (jaimefgdev) in October 2026.
 name: sounddifff audio check
-description: Compare two audio files, publish the report in the job summary and fail the job if the change breaks your rules.
+description: Diff two audio files or folders, or check one file against a loudness target, and fail the job when rules break.
 author: jaimefgdev
 branding:
   icon: activity
   color: blue
 
 inputs:
-  reference:
-    description: Path to the reference audio file (A).
-    required: true
   candidate:
-    description: Path to the audio file to check (B).
+    description: Audio file (or folder) to check.
     required: true
+  reference:
+    description: Reference file (or folder) to compare against. Leave empty to check the candidate against a preset.
+    required: false
+    default: ""
+  preset:
+    description: "Loudness target when there is no reference: spotify, youtube, apple-music, podcast, ebu-r128, atsc-a85."
+    required: false
+    default: ""
   fail-if:
-    description: "Rules that fail the job, e.g. 'lufs>1,peak>0.5,clipping'. Empty means report only."
+    description: "Rules for comparisons, e.g. 'lufs>1,peak>0.5,clipping'. Empty means report only."
     required: false
     default: ""
   report:
-    description: Where to write the HTML report.
+    description: Where to write the HTML report (file comparisons only).
     required: false
     default: sounddifff-report.html
   upload-report:
@@ -30,6 +35,14 @@ inputs:
     description: Artifact name for the report (must be unique per job, e.g. in a matrix).
     required: false
     default: sounddifff-report
+  comment:
+    description: "On pull requests, post the result as a comment (updated on every push). Needs 'pull-requests: write'."
+    required: false
+    default: "false"
+  github-token:
+    description: Token used to post the pull request comment.
+    required: false
+    default: ${{ github.token }}
   python-version:
     description: Python version used to run sounddifff.
     required: false
@@ -40,8 +53,8 @@ outputs:
     description: "'true' if every rule passed (or no rules were given), otherwise 'false'."
     value: ${{ steps.check.outputs.passed }}
   report:
-    description: Path of the HTML report.
-    value: ${{ inputs.report }}
+    description: Path of the HTML report (empty when none was written).
+    value: ${{ steps.check.outputs.report }}
 
 runs:
   using: composite
@@ -54,19 +67,35 @@ runs:
       shell: bash
       run: python -m pip install --quiet "${{ github.action_path }}"
 
-    - name: Compare audio
+    - name: Run sounddifff
       id: check
       shell: bash
       env:
         REFERENCE: ${{ inputs.reference }}
         CANDIDATE: ${{ inputs.candidate }}
+        PRESET: ${{ inputs.preset }}
         FAIL_IF: ${{ inputs.fail-if }}
         REPORT: ${{ inputs.report }}
+        MARKER: "<!-- sounddifff:${{ inputs.artifact-name }} -->"
       run: |
-        sounddifff "$REFERENCE" "$CANDIDATE" --format html -o "$REPORT" > /dev/null
+        report=""
+        if [ -z "$REFERENCE" ]; then
+          if [ -z "$PRESET" ]; then
+            echo "::error title=sounddifff::Set 'reference' to compare files, or 'preset' to check one file."
+            exit 1
+          fi
+          title="\`$CANDIDATE\` against \`$PRESET\`"
+          args=(check "$CANDIDATE" --preset "$PRESET")
+        else
+          title="\`$REFERENCE\` vs \`$CANDIDATE\`"
+          args=("$REFERENCE" "$CANDIDATE" --no-color)
+          if [ -n "$FAIL_IF" ]; then args+=(--fail-if "$FAIL_IF"); fi
+          if [ -f "$REFERENCE" ]; then
+            sounddifff "$REFERENCE" "$CANDIDATE" --format html -o "$REPORT" > /dev/null
+            report="$REPORT"
+          fi
+        fi
 
-        args=("$REFERENCE" "$CANDIDATE" --no-color)
-        if [ -n "$FAIL_IF" ]; then args+=(--fail-if "$FAIL_IF"); fi
         set +e
         sounddifff "${args[@]}" > sounddifff-output.txt 2> sounddifff-failures.txt
         code=$?
@@ -74,8 +103,10 @@ runs:
         cat sounddifff-output.txt
         cat sounddifff-failures.txt >&2
 
+        if [ "$code" -eq 0 ]; then verdict="passed"; elif [ "$code" -eq 3 ]; then verdict="failed"; else exit "$code"; fi
         {
-          echo "### sounddifff: \`$REFERENCE\` vs \`$CANDIDATE\`"
+          echo "$MARKER"
+          echo "### sounddifff: $title — $verdict"
           echo
           echo '```text'
           cat sounddifff-output.txt
@@ -86,24 +117,40 @@ runs:
             echo
             sed 's/^FAIL /- /' sounddifff-failures.txt
           fi
-        } >> "$GITHUB_STEP_SUMMARY"
+        } > sounddifff-summary.md
+        cat sounddifff-summary.md >> "$GITHUB_STEP_SUMMARY"
 
-        if [ "$code" -eq 0 ]; then echo "passed=true" >> "$GITHUB_OUTPUT"
-        elif [ "$code" -eq 3 ]; then echo "passed=false" >> "$GITHUB_OUTPUT"
-        else exit "$code"
+        echo "report=$report" >> "$GITHUB_OUTPUT"
+        if [ "$code" -eq 0 ]; then echo "passed=true" >> "$GITHUB_OUTPUT"; else echo "passed=false" >> "$GITHUB_OUTPUT"; fi
+
+    - name: Comment on the pull request
+      if: always() && inputs.comment == 'true' && startsWith(github.event_name, 'pull_request') && steps.check.outputs.passed != ''
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        REPO: ${{ github.repository }}
+        PR: ${{ github.event.pull_request.number }}
+        MARKER: "<!-- sounddifff:${{ inputs.artifact-name }} -->"
+      run: |
+        existing=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+          --jq "[.[] | select(.body | startswith(\"$MARKER\")) | .id] | first // empty")
+        if [ -n "$existing" ]; then
+          gh api -X PATCH "repos/$REPO/issues/comments/$existing" -F body=@sounddifff-summary.md > /dev/null
+        else
+          gh api -X POST "repos/$REPO/issues/$PR/comments" -F body=@sounddifff-summary.md > /dev/null
         fi
 
     - name: Upload report
-      if: always() && inputs.upload-report == 'true'
+      if: always() && inputs.upload-report == 'true' && steps.check.outputs.report != ''
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.artifact-name }}
-        path: ${{ inputs.report }}
+        path: ${{ steps.check.outputs.report }}
         if-no-files-found: ignore
 
     - name: Fail on broken rules
       if: steps.check.outputs.passed == 'false'
       shell: bash
       run: |
-        echo "::error title=sounddifff::Audio check failed: see the job summary for the broken rules."
+        echo "::error title=sounddifff::Audio check failed: see the job summary for details."
         exit 1
