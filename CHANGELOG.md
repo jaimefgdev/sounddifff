@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Changes by Jaime Fernández González ([@jaimefgdev](https://github.com/jaimefgdev)), maintainer since October 2026.
+
+### Fixed
+- CI: mypy now targets Python 3.12, because NumPy 2.3+ type stubs use 3.12 syntax and broke the lint job.
+  Python 3.10 compatibility is still enforced by ruff (`py310`) and the test matrix.
+- Links, badges, CODEOWNERS and security contact pointed to the original account, which no longer exists.
+
+### Changed
+- README and LICENSE credit systemBlue as the original author and record the current maintainer.
+
+## [0.2.1] and earlier — systemBlue
+
+Original work by systemBlue, published on PyPI up to version 0.2.1 (March 2026).
+
 ### Added
 - Project scaffolding with src layout and hatchling build system
 - CI pipeline with Python 3.10-3.13 matrix on Linux and macOS

@@ -1,10 +1,14 @@
 # sounddiff
 
-[![CI](https://github.com/systemblueteam/sounddiff/actions/workflows/ci.yml/badge.svg)](https://github.com/systemblueteam/sounddiff/actions/workflows/ci.yml)
+[![CI](https://github.com/jaimefgdev/sounddiff/actions/workflows/ci.yml/badge.svg)](https://github.com/jaimefgdev/sounddiff/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/sounddiff)](https://pypi.org/project/sounddiff/)
 [![Python](https://img.shields.io/pypi/pyversions/sounddiff)](https://pypi.org/project/sounddiff/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/systemblueteam/sounddiff?utm_source=oss&utm_medium=github&utm_campaign=systemblueteam%2Fsounddiff&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
+
+> **Origin and maintenance.** sounddiff was created by [systemBlue](https://pypi.org/project/sounddiff/) and released
+> under the MIT license. The original repository is no longer available; this repository is maintained by
+> [Jaime Fernández González (jaimefgdev)](https://github.com/jaimefgdev). The original idea and the code up to
+> March 2026 are systemBlue's; changes from October 2026 onward are listed in the [CHANGELOG](CHANGELOG.md).
 
 sounddiff is a CLI tool for audio producers and developers to compare two audio files and see exactly what changed. It reports differences in loudness, spectral balance, timing, and flags issues like clipping and silence. Output comes as colored terminal text, structured JSON, or a self-contained HTML report.
 
@@ -113,11 +117,11 @@ See [docs/architecture.md](docs/architecture.md) for the full module breakdown a
 
 Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and our development workflow.
 
-The [issue board](https://github.com/systemblueteam/sounddiff/issues) has open work organized by milestone. Issues labeled [`good first issue`](https://github.com/systemblueteam/sounddiff/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are scoped for newcomers and have enough context to get started without deep DSP knowledge.
+The [issue board](https://github.com/jaimefgdev/sounddiff/issues) has open work organized by milestone. Issues labeled [`good first issue`](https://github.com/jaimefgdev/sounddiff/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are scoped for newcomers and have enough context to get started without deep DSP knowledge.
 
 ## Security
 
-Report vulnerabilities to <dev@systemblue.io>. See [SECURITY.md](.github/SECURITY.md) for our disclosure policy.
+Report vulnerabilities privately through [GitHub security advisories](https://github.com/jaimefgdev/sounddiff/security/advisories/new). See [SECURITY.md](.github/SECURITY.md) for our disclosure policy.
 
 ## License
 

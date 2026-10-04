@@ -14,4 +14,4 @@ sounddiff is a CLI tool for comparing two audio files and reporting what changed
 
 ## Source
 
-GitHub: [systemblueteam/sounddiff](https://github.com/systemblueteam/sounddiff)
+GitHub: [jaimefgdev/sounddiff](https://github.com/jaimefgdev/sounddiff)

@@ -15,7 +15,7 @@ If all tests pass, your environment is ready.
 
 ## Finding work
 
-The [issue board](https://github.com/systemblueteam/sounddiff/issues) is organized by milestone. Issues labeled [`good first issue`](https://github.com/systemblueteam/sounddiff/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are scoped for newcomers and include enough context to get started without deep DSP knowledge.
+The [issue board](https://github.com/jaimefgdev/sounddiff/issues) is organized by milestone. Issues labeled [`good first issue`](https://github.com/jaimefgdev/sounddiff/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are scoped for newcomers and include enough context to get started without deep DSP knowledge.
 
 If you want to work on something, leave a comment on the issue so nobody duplicates effort. If you have an idea that isn't on the board, open an issue first so we can align on scope before you write code.
 
@@ -77,4 +77,4 @@ refactor: extract segment detection into its own module
 
 ## Questions
 
-Open an [issue](https://github.com/systemblueteam/sounddiff/issues). We're happy to help with anything from setup problems to architecture questions.
+Open an [issue](https://github.com/jaimefgdev/sounddiff/issues). We're happy to help with anything from setup problems to architecture questions.

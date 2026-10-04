@@ -12,7 +12,7 @@ If you discover a security vulnerability, please report it responsibly.
 
 **Do not open a public issue.**
 
-Email security concerns to **dev@systemblue.io** with:
+Report it privately through [GitHub security advisories](https://github.com/jaimefgdev/sounddiff/security/advisories/new) with:
 
 1. Description of the vulnerability
 2. Steps to reproduce

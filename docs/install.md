@@ -11,7 +11,7 @@ Requires Python 3.10 or later.
 ## From source
 
 ```sh
-git clone https://github.com/systemblueteam/sounddiff.git
+git clone https://github.com/jaimefgdev/sounddiff.git
 cd sounddiff
 pip install -e ".[dev]"
 ```
