@@ -6,7 +6,7 @@ from pathlib import Path
 
 from click.testing import CliRunner
 
-from sounddiff.cli import main
+from sounddifff.cli import main
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
@@ -22,7 +22,7 @@ class TestCLI:
             ],
         )
         assert result.exit_code == 0
-        assert "sounddiff" in result.output
+        assert "sounddifff" in result.output
 
     def test_json_output(self) -> None:
         runner = CliRunner()
@@ -65,7 +65,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(main, ["--version"])
         assert result.exit_code == 0
-        assert "sounddiff" in result.output
+        assert "sounddifff" in result.output
 
     def test_loudness_pair_shows_delta(self) -> None:
         runner = CliRunner()

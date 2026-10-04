@@ -8,9 +8,9 @@ from __future__ import annotations
 
 import sys
 
-from sounddiff.core import diff
-from sounddiff.report import render
-from sounddiff.types import OutputFormat
+from sounddifff.core import diff
+from sounddifff.report import render
+from sounddifff.types import OutputFormat
 
 
 def main() -> None:

@@ -1,4 +1,4 @@
-# sounddiff
+# sounddifff
 
 Structured audio comparison CLI. Python 3.10+, src layout, hatchling build.
 
@@ -14,7 +14,7 @@ ruff check . && ruff format --check . && mypy src
 ## Architecture
 
 ```
-src/sounddiff/
+src/sounddifff/
   types.py       # Dataclasses for all results
   formats.py     # Audio I/O via soundfile
   loudness.py    # LUFS, true peak, LRA (pyloudnorm)

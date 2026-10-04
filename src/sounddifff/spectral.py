@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from sounddiff.types import SpectralBand, SpectralComparison
+from sounddifff.types import SpectralBand, SpectralComparison
 
 # Default frequency bands
 DEFAULT_BANDS: list[tuple[str, float, float]] = [

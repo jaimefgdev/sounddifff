@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 
-from sounddiff.report import render_json, render_terminal
-from sounddiff.types import (
+from sounddifff.report import render_json, render_terminal
+from sounddifff.types import (
     AudioMetadata,
     ClipEvent,
     DetectionResult,

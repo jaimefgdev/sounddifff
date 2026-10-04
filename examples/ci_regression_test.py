@@ -1,4 +1,4 @@
-"""Example: use sounddiff in a CI pipeline for audio regression testing.
+"""Example: use sounddifff in a CI pipeline for audio regression testing.
 
 Usage:
     python examples/ci_regression_test.py reference.wav output.wav
@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import sys
 
-from sounddiff.core import diff
+from sounddifff.core import diff
 
 
 def main() -> None:

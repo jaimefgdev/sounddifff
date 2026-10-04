@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sounddiff"
-version = "0.1.0"
+name = "sounddifff"
+dynamic = ["version"]
 description = "Structured audio comparison for producers and developers. Think git diff, but for audio."
 readme = "README.md"
 license = "MIT"
@@ -54,14 +54,14 @@ dev = [
 ]
 
 [project.scripts]
-sounddiff = "sounddiff.cli:main"
+sounddifff = "sounddifff.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/jaimefgdev/sounddiff"
-Documentation = "https://github.com/jaimefgdev/sounddiff/tree/main/docs"
-Repository = "https://github.com/jaimefgdev/sounddiff"
-Issues = "https://github.com/jaimefgdev/sounddiff/issues"
-Changelog = "https://github.com/jaimefgdev/sounddiff/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/jaimefgdev/sounddifff"
+Documentation = "https://github.com/jaimefgdev/sounddifff/tree/main/docs"
+Repository = "https://github.com/jaimefgdev/sounddifff"
+Issues = "https://github.com/jaimefgdev/sounddifff/issues"
+Changelog = "https://github.com/jaimefgdev/sounddifff/blob/main/CHANGELOG.md"
 
 [tool.ruff]
 target-version = "py310"
@@ -84,7 +84,7 @@ select = [
 ignore = ["E501"]  # line length handled by formatter
 
 [tool.ruff.lint.isort]
-known-first-party = ["sounddiff"]
+known-first-party = ["sounddifff"]
 
 [tool.mypy]
 python_version = "3.12"  # NumPy 2.3+ stubs use 3.12 syntax; 3.10 compatibility is enforced by ruff (py310) and the test matrix
@@ -104,5 +104,8 @@ ignore_missing_imports = true
 testpaths = ["tests"]
 addopts = "-v --tb=short"
 
+[tool.hatch.version]
+path = "src/sounddifff/__init__.py"
+
 [tool.hatch.build.targets.wheel]
-packages = ["src/sounddiff"]
+packages = ["src/sounddifff"]

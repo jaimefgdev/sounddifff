@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in sounddiff
+description: Report a bug in sounddifff
 title: "[Bug]: "
 labels: ["bug"]
 body:
@@ -8,7 +8,7 @@ body:
     attributes:
       label: What happened?
       description: A clear description of the bug.
-      placeholder: When I run sounddiff on two WAV files...
+      placeholder: When I run sounddifff on two WAV files...
     validations:
       required: true
   - type: textarea
@@ -24,15 +24,15 @@ body:
       label: Steps to reproduce
       description: Minimal steps to reproduce the issue.
       placeholder: |
-        1. Run `sounddiff a.wav b.wav`
+        1. Run `sounddifff a.wav b.wav`
         2. See error...
     validations:
       required: true
   - type: input
     id: version
     attributes:
-      label: sounddiff version
-      description: Output of `sounddiff --version`
+      label: sounddifff version
+      description: Output of `sounddifff --version`
       placeholder: "0.1.0"
     validations:
       required: true

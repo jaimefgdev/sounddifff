@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from sounddiff.spectral import compare_spectral, compute_band_energy
+from sounddifff.spectral import compare_spectral, compute_band_energy
 from tests.conftest import SAMPLE_RATE, make_sine
 
 

@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from sounddiff.detection import compare_detection
-from sounddiff.formats import load_audio
-from sounddiff.loudness import compare_loudness
-from sounddiff.spectral import compare_spectral
-from sounddiff.temporal import compare_temporal
-from sounddiff.types import DiffResult, MetadataComparison
+from sounddifff.detection import compare_detection
+from sounddifff.formats import load_audio
+from sounddifff.loudness import compare_loudness
+from sounddifff.spectral import compare_spectral
+from sounddifff.temporal import compare_temporal
+from sounddifff.types import DiffResult, MetadataComparison
 
 
 def diff(

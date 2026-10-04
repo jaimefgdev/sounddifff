@@ -5,8 +5,8 @@ This is a summary. See [CONTRIBUTING.md](../CONTRIBUTING.md) in the project root
 ## Setup
 
 ```sh
-git clone https://github.com/jaimefgdev/sounddiff.git
-cd sounddiff
+git clone https://github.com/jaimefgdev/sounddifff.git
+cd sounddifff
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pre-commit install
@@ -16,7 +16,7 @@ pytest
 
 ## Workflow
 
-1. Pick an issue from the [issue board](https://github.com/jaimefgdev/sounddiff/issues) and comment on it
+1. Pick an issue from the [issue board](https://github.com/jaimefgdev/sounddifff/issues) and comment on it
 2. Create a branch: `git checkout -b feat/42-description`
 3. Write code and tests
 4. Run checks: `ruff check . && ruff format --check . && mypy src && pytest`
@@ -31,4 +31,4 @@ pytest
 - **Testing**: pytest + hypothesis, every feature and bug fix needs a test
 - **PRs**: one concern per PR, CI must pass, [CodeRabbit](https://coderabbit.ai) reviews automatically
 
-Issues labeled [`good first issue`](https://github.com/jaimefgdev/sounddiff/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are scoped for newcomers.
+Issues labeled [`good first issue`](https://github.com/jaimefgdev/sounddifff/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are scoped for newcomers.

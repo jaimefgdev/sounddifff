@@ -3,24 +3,26 @@
 ## From PyPI
 
 ```sh
-pip install sounddiff
+pip install sounddifff
 ```
+
+Package, command and Python module are all called `sounddifff` (three f's).
 
 Requires Python 3.10 or later.
 
 ## From source
 
 ```sh
-git clone https://github.com/jaimefgdev/sounddiff.git
-cd sounddiff
+git clone https://github.com/jaimefgdev/sounddifff.git
+cd sounddifff
 pip install -e ".[dev]"
 ```
 
-This installs sounddiff in editable mode with all development dependencies (pytest, ruff, mypy, hypothesis, pre-commit).
+This installs sounddifff in editable mode with all development dependencies (pytest, ruff, mypy, hypothesis, pre-commit).
 
 ## System dependencies
 
-sounddiff uses [libsndfile](http://www.mega-nerd.com/libsndfile/) for audio I/O. The `soundfile` Python package bundles it on most platforms, but you may need to install it separately.
+sounddifff uses [libsndfile](http://www.mega-nerd.com/libsndfile/) for audio I/O. The `soundfile` Python package bundles it on most platforms, but you may need to install it separately.
 
 **macOS:**
 
@@ -51,34 +53,34 @@ sudo apt-get install ffmpeg
 choco install ffmpeg
 ```
 
-sounddiff checks for ffmpeg at runtime. If you try to compare an MP3 without ffmpeg installed, you'll get a clear error message telling you what to do.
+sounddifff checks for ffmpeg at runtime. If you try to compare an MP3 without ffmpeg installed, you'll get a clear error message telling you what to do.
 
 ## Shell completions
 
-sounddiff uses [click](https://click.palletsprojects.com/) which provides shell completion out of the box.
+sounddifff uses [click](https://click.palletsprojects.com/) which provides shell completion out of the box.
 
 **bash** (add to `~/.bashrc`):
 
 ```sh
-eval "$(_SOUNDDIFF_COMPLETE=bash_source sounddiff)"
+eval "$(_SOUNDDIFF_COMPLETE=bash_source sounddifff)"
 ```
 
 **zsh** (add to `~/.zshrc`):
 
 ```sh
-eval "$(_SOUNDDIFF_COMPLETE=zsh_source sounddiff)"
+eval "$(_SOUNDDIFF_COMPLETE=zsh_source sounddifff)"
 ```
 
 **fish** (add to `~/.config/fish/config.fish`):
 
 ```sh
-_SOUNDDIFF_COMPLETE=fish_source sounddiff | source
+_SOUNDDIFF_COMPLETE=fish_source sounddifff | source
 ```
 
 ## Verifying the installation
 
 ```sh
-sounddiff --version
+sounddifff --version
 ```
 
 This should print the installed version number.

@@ -1,0 +1,109 @@
+# GitHub Action for audio regression checks.
+# Added by Jaime Fernández González (jaimefgdev) in October 2026.
+name: sounddifff audio check
+description: Compare two audio files, publish the report in the job summary and fail the job if the change breaks your rules.
+author: jaimefgdev
+branding:
+  icon: activity
+  color: blue
+
+inputs:
+  reference:
+    description: Path to the reference audio file (A).
+    required: true
+  candidate:
+    description: Path to the audio file to check (B).
+    required: true
+  fail-if:
+    description: "Rules that fail the job, e.g. 'lufs>1,peak>0.5,clipping'. Empty means report only."
+    required: false
+    default: ""
+  report:
+    description: Where to write the HTML report.
+    required: false
+    default: sounddifff-report.html
+  upload-report:
+    description: Upload the HTML report as a workflow artifact.
+    required: false
+    default: "true"
+  artifact-name:
+    description: Artifact name for the report (must be unique per job, e.g. in a matrix).
+    required: false
+    default: sounddifff-report
+  python-version:
+    description: Python version used to run sounddifff.
+    required: false
+    default: "3.13"
+
+outputs:
+  passed:
+    description: "'true' if every rule passed (or no rules were given), otherwise 'false'."
+    value: ${{ steps.check.outputs.passed }}
+  report:
+    description: Path of the HTML report.
+    value: ${{ inputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install sounddifff
+      shell: bash
+      run: python -m pip install --quiet "${{ github.action_path }}"
+
+    - name: Compare audio
+      id: check
+      shell: bash
+      env:
+        REFERENCE: ${{ inputs.reference }}
+        CANDIDATE: ${{ inputs.candidate }}
+        FAIL_IF: ${{ inputs.fail-if }}
+        REPORT: ${{ inputs.report }}
+      run: |
+        sounddifff "$REFERENCE" "$CANDIDATE" --format html -o "$REPORT" > /dev/null
+
+        args=("$REFERENCE" "$CANDIDATE" --no-color)
+        if [ -n "$FAIL_IF" ]; then args+=(--fail-if "$FAIL_IF"); fi
+        set +e
+        sounddifff "${args[@]}" > sounddifff-output.txt 2> sounddifff-failures.txt
+        code=$?
+        set -e
+        cat sounddifff-output.txt
+        cat sounddifff-failures.txt >&2
+
+        {
+          echo "### sounddifff: \`$REFERENCE\` vs \`$CANDIDATE\`"
+          echo
+          echo '```text'
+          cat sounddifff-output.txt
+          echo '```'
+          if [ -s sounddifff-failures.txt ]; then
+            echo
+            echo "**Failed rules**"
+            echo
+            sed 's/^FAIL /- /' sounddifff-failures.txt
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        if [ "$code" -eq 0 ]; then echo "passed=true" >> "$GITHUB_OUTPUT"
+        elif [ "$code" -eq 3 ]; then echo "passed=false" >> "$GITHUB_OUTPUT"
+        else exit "$code"
+        fi
+
+    - name: Upload report
+      if: always() && inputs.upload-report == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.report }}
+        if-no-files-found: ignore
+
+    - name: Fail on broken rules
+      if: steps.check.outputs.passed == 'false'
+      shell: bash
+      run: |
+        echo "::error title=sounddifff::Audio check failed: see the job summary for the broken rules."
+        exit 1

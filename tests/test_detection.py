@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from sounddiff.detection import compare_detection, detect_clipping, detect_silence
+from sounddifff.detection import compare_detection, detect_clipping, detect_silence
 from tests.conftest import SAMPLE_RATE
 
 

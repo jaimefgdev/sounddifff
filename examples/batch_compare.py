@@ -9,8 +9,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from sounddiff.core import diff
-from sounddiff.formats import NATIVE_FORMATS
+from sounddifff.core import diff
+from sounddifff.formats import NATIVE_FORMATS
 
 
 def main() -> None:

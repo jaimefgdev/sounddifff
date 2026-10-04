@@ -12,7 +12,7 @@ If you discover a security vulnerability, please report it responsibly.
 
 **Do not open a public issue.**
 
-Report it privately through [GitHub security advisories](https://github.com/jaimefgdev/sounddiff/security/advisories/new) with:
+Report it privately through [GitHub security advisories](https://github.com/jaimefgdev/sounddifff/security/advisories/new) with:
 
 1. Description of the vulnerability
 2. Steps to reproduce
@@ -23,7 +23,7 @@ We will acknowledge receipt within 48 hours and provide a timeline for a fix. Se
 
 ## Scope
 
-sounddiff processes audio files from disk. Relevant security concerns include:
+sounddifff processes audio files from disk. Relevant security concerns include:
 
 - Path traversal in file handling
 - Denial of service via malformed audio files

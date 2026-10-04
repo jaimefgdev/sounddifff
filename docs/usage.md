@@ -3,7 +3,7 @@
 ## Basic comparison
 
 ```sh
-sounddiff old-mix.wav new-mix.wav
+sounddifff old-mix.wav new-mix.wav
 ```
 
 This runs all analyses (loudness, spectral, temporal, detection) and prints a colored terminal report.
@@ -15,7 +15,7 @@ The first argument is the reference file. The second is the file you're comparin
 ### Terminal (default)
 
 ```sh
-sounddiff a.wav b.wav
+sounddifff a.wav b.wav
 ```
 
 Colored, grouped by category. Designed to be read top to bottom. Loudness changes are highlighted in red (louder) or green (quieter). Clipping and other issues are flagged at the bottom.
@@ -23,7 +23,7 @@ Colored, grouped by category. Designed to be read top to bottom. Loudness change
 ### JSON
 
 ```sh
-sounddiff a.wav b.wav --format json
+sounddifff a.wav b.wav --format json
 ```
 
 Structured JSON with the same data as the terminal output. Every measurement is included with both raw values and computed deltas. Useful for piping to [jq](https://jqlang.github.io/jq/), parsing in scripts, or integrating into CI pipelines.
@@ -31,10 +31,23 @@ Structured JSON with the same data as the terminal output. Every measurement is 
 ### HTML
 
 ```sh
-sounddiff a.wav b.wav --format html -o report.html
+sounddifff a.wav b.wav --format html -o report.html
 ```
 
 Self-contained HTML file with inline styles. No external dependencies, no JavaScript. Open it in any browser, email it, or archive it alongside your session files.
+
+## Failing on changes (`--fail-if`)
+
+```sh
+sounddifff reference.wav render.wav --fail-if "lufs>1,peak>0.5,clipping"
+```
+
+Rules are comma-separated. Numeric rules (`lufs`, `peak`, `lra`, `band`, `duration` with `>N`; `correlation` with `<N`)
+compare the absolute change between the two files. Flag rules (`clipping`, `silence`, `format`) check for problems in
+the second file. The report is printed as usual; each broken rule is written to stderr as `FAIL <rule>: <detail>`.
+
+Exit codes: `0` all rules pass, `1` error (unreadable file, unsupported format), `2` invalid command line or rule,
+`3` at least one rule failed.
 
 ## CLI options
 
@@ -64,7 +77,7 @@ Self-contained HTML file with inline styles. No external dependencies, no JavaSc
 
 ### Metadata section
 
-Compares duration, sample rate, and channel count between the two files. If sample rates differ, sounddiff warns you that comparison accuracy may be reduced.
+Compares duration, sample rate, and channel count between the two files. If sample rates differ, sounddifff warns you that comparison accuracy may be reduced.
 
 ### Loudness section
 
@@ -106,7 +119,7 @@ Use JSON output and parse the results in your CI pipeline:
 
 ```sh
 # Check if loudness changed by more than 0.5 dB
-sounddiff reference.wav output.wav --format json | jq '.loudness.lufs_delta'
+sounddifff reference.wav output.wav --format json | jq '.loudness.lufs_delta'
 ```
 
 See [`examples/ci_regression_test.py`](../examples/ci_regression_test.py) for a complete example with configurable thresholds and pass/fail exit codes.

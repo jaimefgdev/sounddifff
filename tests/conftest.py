@@ -1,4 +1,4 @@
-"""Shared fixtures for sounddiff tests."""
+"""Shared fixtures for sounddifff tests."""
 
 from __future__ import annotations
 

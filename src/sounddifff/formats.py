@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np  # noqa: TC002 (used at runtime in return type)
 import soundfile as sf
 
-from sounddiff.types import AudioMetadata
+from sounddifff.types import AudioMetadata
 
 # Formats supported natively via libsndfile
 NATIVE_FORMATS = {".wav", ".flac", ".ogg", ".aiff", ".aif"}

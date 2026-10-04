@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from sounddiff.temporal import compare_temporal, compute_correlation, detect_segments
-from sounddiff.types import SegmentKind
+from sounddifff.temporal import compare_temporal, compute_correlation, detect_segments
+from sounddifff.types import SegmentKind
 from tests.conftest import SAMPLE_RATE, make_sine
 
 

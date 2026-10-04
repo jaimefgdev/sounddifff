@@ -1,4 +1,4 @@
-"""Data types for sounddiff analysis results."""
+"""Data types for sounddifff analysis results."""
 
 from __future__ import annotations
 

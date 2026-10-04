@@ -1,15 +1,15 @@
 audio-core:
   - changed-files:
       - any-glob-to-any-file:
-          - src/sounddiff/loudness.py
-          - src/sounddiff/spectral.py
-          - src/sounddiff/temporal.py
-          - src/sounddiff/detection.py
+          - src/sounddifff/loudness.py
+          - src/sounddifff/spectral.py
+          - src/sounddifff/temporal.py
+          - src/sounddifff/detection.py
 
 cli:
   - changed-files:
       - any-glob-to-any-file:
-          - src/sounddiff/cli.py
+          - src/sounddifff/cli.py
 
 docs:
   - changed-files:

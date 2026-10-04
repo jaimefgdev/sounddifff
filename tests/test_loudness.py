@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from sounddiff.loudness import compare_loudness, measure_loudness
+from sounddifff.loudness import compare_loudness, measure_loudness
 from tests.conftest import SAMPLE_RATE, make_sine
 
 

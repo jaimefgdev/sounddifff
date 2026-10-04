@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from sounddiff.types import ClipEvent, DetectionResult, SilenceRegion
+from sounddifff.types import ClipEvent, DetectionResult, SilenceRegion
 
 
 def detect_clipping(

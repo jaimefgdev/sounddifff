@@ -3,7 +3,7 @@
 ## Module layout
 
 ```text
-src/sounddiff/
+src/sounddifff/
   types.py       Frozen dataclasses for all analysis results
   formats.py     Audio I/O and format detection (soundfile)
   loudness.py    LUFS, true peak, loudness range (pyloudnorm)
@@ -73,7 +73,7 @@ Key fixtures in `conftest.py` provide pre-loaded audio pairs (identical, loud/qu
 
 ## Adding a new analysis module
 
-1. Create `src/sounddiff/your_module.py` with a `compare_*` function that takes audio data and returns a result dataclass
+1. Create `src/sounddifff/your_module.py` with a `compare_*` function that takes audio data and returns a result dataclass
 2. Add the result dataclass to `types.py`
 3. Call your `compare_*` function from `core.py` and include the result in `DiffResult`
 4. Add rendering logic to `report.py` for terminal, JSON, and HTML output

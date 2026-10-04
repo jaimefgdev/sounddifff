@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from sounddiff.formats import format_channels, format_duration, load_audio
+from sounddifff.formats import format_channels, format_duration, load_audio
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 

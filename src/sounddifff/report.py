@@ -11,8 +11,8 @@ from typing import Any
 from rich.console import Console
 from rich.table import Table
 
-from sounddiff.formats import format_channels, format_duration
-from sounddiff.types import DiffResult, OutputFormat, SegmentKind
+from sounddifff.formats import format_channels, format_duration
+from sounddifff.types import DiffResult, OutputFormat, SegmentKind
 
 
 def render(
@@ -52,7 +52,7 @@ def render_terminal(result: DiffResult, no_color: bool = False) -> str:
     file_b = Path(meta.file_b.path).name
 
     console.print()
-    console.print(f"[bold]sounddiff:[/bold] {file_a} vs {file_b}")
+    console.print(f"[bold]sounddifff:[/bold] {file_a} vs {file_b}")
     console.print()
 
     # Warnings
@@ -275,7 +275,7 @@ def _render_html_fallback(result: DiffResult) -> str:
         '<html lang="en">\n<head>\n'
         '<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        f"<title>sounddiff: {file_a} vs {file_b}</title>\n"
+        f"<title>sounddifff: {file_a} vs {file_b}</title>\n"
         "<style>\n"
         "body { font-family: system-ui, -apple-system, sans-serif; max-width: 800px;"
         " margin: 2rem auto; padding: 0 1rem; background: #1a1a2e; color: #e0e0e0; }\n"
@@ -289,7 +289,7 @@ def _render_html_fallback(result: DiffResult) -> str:
         "pre { background: #16213e; padding: 1rem; border-radius: 4px;"
         " overflow-x: auto; font-size: 0.85rem; }\n"
         "</style>\n</head>\n<body>\n"
-        f"<h1>sounddiff: {file_a} vs {file_b}</h1>\n\n"
+        f"<h1>sounddifff: {file_a} vs {file_b}</h1>\n\n"
         "<h2>Loudness</h2>\n<table>\n"
         f"<tr><td>LUFS</td><td>{result.loudness.file_a.lufs:.1f}</td>"
         f"<td>{result.loudness.file_b.lufs:.1f}</td>"

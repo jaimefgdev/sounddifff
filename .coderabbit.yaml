@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
-# sounddiff — Python CLI for structured audio comparison
+# sounddifff — Python CLI for structured audio comparison
 inheritance: true
 
 reviews:
@@ -18,9 +18,9 @@ reviews:
     - "!.coderabbit.yaml"
     - "!scripts/**"
   path_instructions:
-    - path: "src/sounddiff/**/*.py"
+    - path: "src/sounddifff/**/*.py"
       instructions: |
-        sounddiff is a Python 3.10+ CLI tool for structured audio comparison.
+        sounddifff is a Python 3.10+ CLI tool for structured audio comparison.
         Uses numpy, scipy, pyloudnorm for DSP. Click for CLI. Rich for terminal output.
         mypy strict mode. Ruff for linting and formatting.
 
@@ -42,13 +42,13 @@ reviews:
         - Missing docstrings on private functions (underscore-prefixed)
         - Import ordering (ruff handles this)
         - Line length (ruff formatter handles this)
-    - path: "src/sounddiff/cli.py"
+    - path: "src/sounddifff/cli.py"
       instructions: |
         CLI entry point using Click. Review for:
         - Clear error messages for all failure modes
         - Correct exit codes (0 success, 1 for errors)
         - No unhandled exceptions reaching the user
-    - path: "src/sounddiff/{loudness,spectral,temporal,detection}.py"
+    - path: "src/sounddifff/{loudness,spectral,temporal,detection}.py"
       instructions: |
         Core DSP modules. Review with extra care for:
         - Mathematical correctness (dB conversions, RMS calculations, correlation)

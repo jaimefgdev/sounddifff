@@ -1,11 +1,11 @@
 # API Reference
 
-sounddiff can be used as a Python library in addition to the CLI. Import the `diff` function, pass two file paths, and get back a typed result object.
+sounddifff can be used as a Python library in addition to the CLI. Import the `diff` function, pass two file paths, and get back a typed result object.
 
 ## Quick example
 
 ```python
-from sounddiff.core import diff
+from sounddifff.core import diff
 
 result = diff("old-mix.wav", "new-mix.wav")
 
@@ -19,7 +19,7 @@ for band in result.spectral.bands:
 
 ## Core
 
-### `sounddiff.core.diff(path_a, path_b) -> DiffResult`
+### `sounddifff.core.diff(path_a, path_b) -> DiffResult`
 
 Compare two audio files and return a structured result.
 
@@ -30,7 +30,7 @@ Compare two audio files and return a structured result.
 
 ## Types
 
-All result types are frozen dataclasses defined in `sounddiff.types`. They are immutable after creation. Computed values (deltas, durations) are exposed as properties.
+All result types are frozen dataclasses defined in `sounddifff.types`. They are immutable after creation. Computed values (deltas, durations) are exposed as properties.
 
 ### `DiffResult`
 
@@ -163,13 +163,13 @@ Properties: `duration`
 
 ## Report
 
-### `sounddiff.report.render(result, fmt, output_path=None) -> str`
+### `sounddifff.report.render(result, fmt, output_path=None) -> str`
 
 Render a `DiffResult` in the specified format.
 
 ```python
-from sounddiff.report import render
-from sounddiff.types import OutputFormat
+from sounddifff.report import render
+from sounddifff.types import OutputFormat
 
 # Terminal output (colored text)
 print(render(result, OutputFormat.TERMINAL))
@@ -187,10 +187,10 @@ Enum with three values: `TERMINAL`, `JSON`, `HTML`.
 
 ## Formats
 
-### `sounddiff.formats.load_audio(path) -> tuple[ndarray, AudioMetadata]`
+### `sounddifff.formats.load_audio(path) -> tuple[ndarray, AudioMetadata]`
 
 Load an audio file and return the signal as a float64 numpy array (shape: frames x channels) along with its metadata. Mono files are returned with shape (frames, 1).
 
-### `sounddiff.formats.format_duration(seconds) -> str`
+### `sounddifff.formats.format_duration(seconds) -> str`
 
 Format a duration as `M:SS.mmm` (e.g., `3:42.108`).

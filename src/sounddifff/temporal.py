@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from sounddiff.types import Segment, SegmentKind, TemporalComparison
+from sounddifff.types import Segment, SegmentKind, TemporalComparison
 
 
 def compute_correlation(a: np.ndarray, b: np.ndarray) -> float:

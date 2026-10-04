@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pyloudnorm as pyln
 
-from sounddiff.types import LoudnessComparison, LoudnessResult
+from sounddifff.types import LoudnessComparison, LoudnessResult
 
 
 def measure_loudness(data: np.ndarray, sample_rate: int) -> LoudnessResult:
